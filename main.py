@@ -1,3 +1,6 @@
+from inspect import stack
+
+
 class ListNode(object):
     def __init__(self, val=0, next=None):
         self.val = val
@@ -94,13 +97,98 @@ class Solution(object):
 
             used[char] = index
         return maxl
-                
+
+    # Given a string of brackets, ex. "[]{}()()"
+    # Determine if the string is valid
+    # Valid string must properly close brackets
+    def isValid(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        brackets = dict({
+            '(' : ')',
+            '[' : ']',
+            '{' : '}'
+        })
+        bracketStack = list()
+
+        for char in s:
+            if char in brackets.keys():
+                bracketStack.append(char)
+            elif len(bracketStack) == 0 or char != brackets[bracketStack.pop()]:
+                return False
+        
+        return len(bracketStack) == 0
+
+    # Given two sorted lists, list1 and list2
+    # Merge the two lists and return the sorted list
+    def mergeTwoLists(self, list1, list2):
+        """
+        :type list1: Optional[ListNode]
+        :type list2: Optional[ListNode]
+        :rtype: Optional[ListNode]
+        """
+        headNode = ListNode()
+        nextNode = headNode
+        while list1 != None or list2 != None:
+            if list1.val > list2.val:
+                nextNode.val = list2.val
+                list2 = list2.next
+            else:
+                nextNode.val = list1.val
+                list1 = list1.next
+            
+            newNode = ListNode()
+            nextNode.next = newNode
+            nextNode = newNode
+        
+        return headNode
+
+    # Remove duplicates from array of nums in place
+    # Return value is an int describing the total unique values
+    def removeDuplicates(self, nums):
+        """
+        :type list1: Optional[ListNode]
+        :type list2: Optional[ListNode]
+        :rtype: Optional[ListNode]
+        """
+        k = i = 0
+        lv = "init" # last checked value
+        for i in nums:
+            if i != lv:
+                nums[k] = i
+                lv = nums[k]
+                k+=1
+        
+        return k
+    
+    # Remove duplicates from array of nums in place
+    # Return value is an int describing the total unique values
+    # Allow for multiple entries up to 'c' times
+    def removeDuplicates2(self, nums, max):
+        k = i = c = 0
+        lv = "init" # last checked value
+        for i in nums:
+            if i != lv:
+                nums[k] = i
+                lv = i
+                k+=1
+                c=1
+            elif c<max:
+                nums[k] = i
+                c+=1
+                k+=1
+
+        return k
 
 def main():
     solution = Solution()
 
-    ans = solution.lengthOfLongestSubstring("abccq")
-    print(ans)
+    nums = [1,2,2,3,4,5,5, 5, 5,6,6,7,7,7,7,7]
+    intvalue = solution.removeDuplicates2(nums, 4)
+    print(nums)
+    print(intvalue)
 
 
 if __name__ == "__main__": main()
