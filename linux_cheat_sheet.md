@@ -1,31 +1,31 @@
 # CLI Commands
 
 ###  Basic CMDS
--ls		list files
--mkdir 		make directory
--ln		create a link
--touch		create a filie
--rm		remove file
--rmdir		remove directory
--rm -r		remove dir w/ files
--nohup 		dictates that a process runs in the background
+-ls		list files	\
+-mkdir 		make directory	\
+-ln		create a link	\
+-touch		create a filie	\
+-rm		remove file	\
+-rmdir		remove directory\
+-rm -r		remove dir w/ files	\
+-nohup 		dictates that a process runs in the background	\
 
 ### Memory CMDS
--df		show file size usage
--free		show physical memory
--vmstat -a	virtual memory
--sar 		cpu usage
--history		cmd history
+-df		show file size usage	\
+-free		show physical memory	\
+-vmstat -a	virtual memory		\
+-sar 		cpu usage		\
+-history	cmd history		\
 
 ### Info CMDS
--env 		system environment variables
--set 		show all variables
--set -o posix	remove the functions from this variable listing
--pwd		display file system total space and available space
+-env 		system environment variables	\
+-set 		show all variables		\
+-set -o posix	remove the functions from this variable listing	\
+-pwd		display file system total space and available space \
 
 $$# Regex
---a 		all
--*		wildcard character
+--a 		all	\
+-*		wildcard character	\
 
 # Concept Questions
 
@@ -46,9 +46,9 @@ System administrator - has all the perms for all current software
 5. Re-mount the filesystem using <mount>
 
 ### What is swap space?
--Swap space is an amount of space used by Linux to temporarily hold active programs
--Improves system performance
--Typical size is twice the amount available of physical memory
+-Swap space is an amount of space used by Linux to temporarily hold active programs \
+-Improves system performance	\
+-Typical size is twice the amount available of physical memory	\
 
 ### What are the kind of permissions available in Linux?
 -Read-Only
@@ -56,9 +56,9 @@ System administrator - has all the perms for all current software
 -Execute
 
 ### How to change permissions in Linux?
--chmod		change permissions of files/dir
--chown		change the owner of files/dir
--chgrp 		change group owner
+-chmod		change permissions of files/dir	\
+-chown		change the owner of files/dir	\
+-chgrp 		change group owner		\
 
 ### What are symbolic links?
 -Like shortcuts in windows
@@ -70,7 +70,7 @@ System administrator - has all the perms for all current software
 -255 Chars
 
 ### What is redirection in Linux?
--Used to pass the output of an operation to another operation
+-Used to pass the output of an operation to another operation	\
 -Example <w > log>
 
 ### How to terminate a process in Linux?
@@ -86,5 +86,5 @@ System administrator - has all the perms for all current software
 -Stores informated about a file (metadata)
 
 ### Which CMD is used to set a process to execute in less time?
--<nice [option] [cmd [arg]...]
+-<nice [option] [cmd [arg]...]	\
 -Priority ranges from -20 to 19
