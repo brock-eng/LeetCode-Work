@@ -23,9 +23,9 @@ set 		show all variables		\
 set -o posix	remove the functions from this variable listing	\
 pwd		display file system total space and available space \
 
-$$# Regex
+## Regex
 -a 		all	\
-*		wildcard character	\
+\*		wildcard character
 
 # Concept Questions
 
