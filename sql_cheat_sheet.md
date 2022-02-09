@@ -14,13 +14,15 @@ AND, OR, NOT			- traditional logic
 ORDER BY [args] ASC|DESC	- sort columns in ascending or descending order
 SET				- used with update statements
 LIKE				- used with WHERE to search for specified pattern
+IN				- used with WHERE to specify multiple search terms
+
 
 ### Functions
-MIN() | MAX()			- used with SELECT for min/max entries
-COUNT()				- counts number of matching entries
-AVG()				- average
-SUM()				- summation
-GETDATE()			- returns current date/time
+MIN() | MAX()			- used with SELECT for min/max entries	\
+COUNT()				- counts number of matching entries	\
+AVG()				- average	\
+SUM()				- summation	\
+GETDATE()			- returns current date/time	\
 
 ### Commonly Used
 INSERT INTO		- inserts new data into a database	\
@@ -31,39 +33,46 @@ CREATE INDEX		- creates an index (search key) \
 DROP INDEX		- delete an index
 
 ### Wildcard characters
-Note: for MySQL	\
-%	*- zero, one, or multiple characters* \
-_	*- one character*
+Similar to regex notation			\
+%	* |zero, one, or multiple characters* 	\
+_	* |one character*			\
+[chars] * |select multiple characters		\
+!	* not operator
 ```sql
+-- for mysql
 -- select all strings that start with "abc"
 "abc%" 
 -- all strings that contain letter "x"
 "%x%"
 -- all strings where 2nd letter is "z"
 "_z%"
+-- all strings where 1st letter is either "a", "b", or "c"
+"[abc]%"
+-- all strings where 1st letter is NOT "a", "b", or "c"
+"[!abc]%
 ```
 
 ## Usage Examples
-Select all distinct column entries
+**Select** all distinct column entries
 ```sql
 SELECT DISTINCT ColumnName FROM TableName;
 ```
 
-Update an existing table record
+**Update** an existing table record
 ```sql
 UPDATE TableName
 SET ColumnName = data, ColumnName2 = data, ...
 WHERE ... ;
 ```
 
-Delete a table entry
+**Delete** a table entry
 ```sql
 DELETE FROM TableName
 WHERE ... ;
 ```
 
-Select a certain number of results out of a query
-*Note that this is platform dependent
+**Limit** the number of results out of a query	\
+*Note that this is platform dependent*
 ```sql
 --mySQL
 SELECT ColumnName
@@ -72,19 +81,25 @@ WHERE ...
 LIMIT number;
 ```
 
-Select the maximum return value for a query
+Select the **maximum** (or minimum) return value for a query
 ```sql
 SELECT MAX(columnName)
 FROM tableName
 WHERE ...
 ```
 
-Search for entries that contains the string "sample" in the data
+Search for entries that **contains** the string "sample" in the data
 ```sql
 SELECT *
 FROM TableName
 WHERE ... LIKE "%sample%";
 ``` 
+
+Search for entries where the columnValue is **in** another table
+```sql
+SELECT * FROM tableName
+WHERE columnName IN (SELECT columnName FROM alternateTable);
+```
 
 ## Concept Questions
 
