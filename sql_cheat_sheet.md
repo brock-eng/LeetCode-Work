@@ -24,20 +24,19 @@ DROP INDEX		- delete an index
 
 
 ## Usage Examples
-Select all distinct column entries \
-'''sql
+Select all distinct column entries
+```sql
 SELECT DISTINCT ColumnName FROM TableName;
-'''
+```
 
-Update an existing table record \
-'''sql
+Update an existing table record
+```sql
 UPDATE TableName
 SET ColumnName = someData
 WHERE ColumnName_ = someData;
-'''
+```
 
-Select 
-## Questions
+## Concept Questions
 
 ### Difference between DELETE / TRUNCATE
 Truncate is non-reversible operation
