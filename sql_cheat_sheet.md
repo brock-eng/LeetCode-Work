@@ -31,9 +31,9 @@ CREATE INDEX		- creates an index (search key) \
 DROP INDEX		- delete an index
 
 ### Wildcard characters
-Note: for MySQL
-%	- zero, one, or multiple characters \
-_	- one character
+Note: for MySQL	\
+%	*- zero, one, or multiple characters* \
+_	*- one character*
 ```sql
 -- select all strings that start with "abc"
 "abc%" 
