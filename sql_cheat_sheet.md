@@ -8,7 +8,13 @@ UPDATE		- update		\
 INSERT		- insert a new entry	\
 DELETE		- delete a row
 
-### Most important
+### Keywords / Clauses
+WHERE				- for conditionals
+AND, OR, NOT			- traditional logic
+ORDER BY [args] ASC|DESC	- sort columns in ascending or descending order
+SET
+
+### Commonly Used
 INSERT INTO		- inserts new data into a database	\
 CREATE DATABASE		\
 ALTER DATABASE		\
@@ -16,6 +22,21 @@ DROP TABLE		- delete table	\
 CREATE INDEX		- creates an index (search key) \
 DROP INDEX		- delete an index
 
+
+## Usage Examples
+Select all distinct column entries \
+'''sql
+SELECT DISTINCT ColumnName FROM TableName;
+'''
+
+Update an existing table record \
+'''sql
+UPDATE TableName
+SET ColumnName = someData
+WHERE ColumnName_ = someData;
+'''
+
+Select 
 ## Questions
 
 ### Difference between DELETE / TRUNCATE
@@ -34,7 +55,7 @@ Unique identifier used to identify table rows
 ### What are constraints?
 Specify limits on the data types of the table \
 Types: \
-NOT NULL	\
+IS|NOT NULL	\
 UNIQUE		\
 CHECK		- satifies specific condition 			\
 DEFAULT		- must adhere to a set of default values	\
