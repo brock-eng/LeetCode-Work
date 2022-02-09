@@ -28,7 +28,6 @@ SUM()				- summation	\
 GETDATE()			- returns current date/time	\
 CONCAT()			- concatenate strings	\
 
-
 ### Commonly Used
 INSERT INTO		- inserts new data into a database	\
 CREATE DATABASE		\
@@ -120,7 +119,7 @@ FROM tableName AS t, tableName2 AS t2
 WHERE ...
 ```
 
-Sample JOIN statement: pair customer data with order data	\
+Sample **JOIN** statement: pair customer data with order data	\
 Selects data where customer table and order table both contain customerID	
 ```sql
 SELECT Orders.OrderID, Customers.CustomerName
@@ -135,10 +134,10 @@ Truncate is non-reversible operation
 
 ### What are joins in SQL?
 Used to combine records from two or more tables w/ matching column	\
-Four types \
-1. Inner Join - Returns records with matching values in both tables				\
-2. Left Join - Returns records from the left table, and the matched records from the right	\
-3. Right Join - Returns records from the right table, and the matched records from the left	\
+Four types 
+1. Inner Join - Returns records with matching values in both tables				
+2. Left Join - Returns records from the left table, and the matched records from the right	
+3. Right Join - Returns records from the right table, and the matched records from the left	
 4. Cross Join - Returns all records from both tables
 
 ### Diff between CHAR and VARCHAR2?
@@ -160,3 +159,35 @@ INDEX		- used to create and retrieve data quickly	\
 Technique used to access data from higher to lower forms of a database	\
 Improves performance
 
+### What are Information Schema views?
+Used to obtain metadata from SQL tables, i.e. all column headers	\
+Sample query:
+```sql
+SELECT *
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'tableName';
+```
+Different metadata fields that can be accessed:
+```sql
+INFORMATION_SCHEMA.(...	)
+    CHECK_CONSTRAINTS
+    COLUMN_DOMAIN_USAGE
+    COLUMN_PRIVILEGES
+    COLUMNS
+    CONSTRAINT_COLUMN_USAGE
+    CONSTRAINT_TABLE_USAGE
+    DOMAIN_CONSTRAINTS
+    DOMAINS
+    KEY_COLUMN_USAGE
+    PARAMETERS
+    REFERENTIAL_CONSTRAINTS
+    ROUTINES
+    ROUTINE_COLUMNS
+    SCHEMATA
+    TABLE_CONSTRAINTS
+    TABLE_PRIVILEGES
+    TABLES
+    VIEW_COLUMN_USAGE
+    VIEW_TABLE_USAGE
+    VIEWS
+```
