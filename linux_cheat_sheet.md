@@ -1,27 +1,28 @@
 # CLI Commands
 
 ###  Basic CMDS
-ls		list files	\
-mkdir 		make directory	\
-ln		create a link	\
-touch		create a filie	\
-rm		remove file	\
-rmdir		remove directory\
-rm -r		remove dir w/ files	\
-nohup 		dictates that a process runs in the background	\
+ls		  - list files	\
+mkdir 	- make directory	\
+ln		  - create a link	\
+touch		- create a filie	\
+rm		  - remove file	\
+rmdir		- remove directory\
+rm -r		- remove dir w/ files	\
+nohup 	- dictates that a process runs in the background	\
+cat     - show contents of a text file
 
 ### Memory CMDS
-df		show file size usage	\
-free		show physical memory	\
-vmstat -a	virtual memory		\
-sar 		cpu usage		\
-history	cmd history		\
+df		    - show file size usage	\
+free		  - show physical memory	\
+vmstat -a	- virtual memory		\
+sar 		  - cpu usage		\
+history	  - cmd history		\
 
 ### Info CMDS
-env 		system environment variables	\
-set 		show all variables		\
-set -o posix	remove the functions from this variable listing	\
-pwd		display file system total space and available space \
+env 		      - system environment variables	\
+set 		      - show all variables		\
+set -o posix	- remove the functions from this variable listing	\
+pwd		        - display file system total space and available space \
 
 # Concept Questions
 
@@ -52,9 +53,9 @@ Write
 Execute
 
 ### How to change permissions in Linux?
-chmod		change permissions of files/dir	\
-chown		change the owner of files/dir	\
-chgrp 		change group owner		\
+chmod		- change permissions of files/dir	\
+chown		- change the owner of files/dir	\
+chgrp 	- change group owner		\
 
 ### What are symbolic links?
 Like shortcuts in windows
