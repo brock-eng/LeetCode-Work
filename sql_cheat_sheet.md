@@ -191,3 +191,6 @@ INFORMATION_SCHEMA.(...	)
     VIEW_TABLE_USAGE
     VIEWS
 ```
+
+
+<img src="https://i.stack.imgur.com/4zjxm.png">
