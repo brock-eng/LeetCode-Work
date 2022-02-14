@@ -182,7 +182,7 @@ class Solution(object):
 
         return k 
         
-        # Reverse a linked list
+    # Reverse a linked list
     def reverseList(self, head):
         """
         :type head: ListNode
@@ -243,7 +243,7 @@ class Solution(object):
         return ans
 
     # Given a string s, return the longest palindromic substring in s
-    def longestPalindrome_BAD(self, s):
+    def longestPalindrome_OLD(self, s):
         """
         :type s: str
         :rtype: str
@@ -296,6 +296,7 @@ class Solution(object):
 
         return ans
 
+    # Return the max area enclosed by two bars in a height map
     def maxArea(self, height):
         """
         :type height: List[int]
@@ -316,20 +317,167 @@ class Solution(object):
                 ans = max(V(height[l], height[r], r - l), ans)
             else:
                 r-=1
-                ans = max(V(height[l], height[r], r - 1), ans)
+                ans = max(V(height[l], height[r], r - l), ans)
+        return ans
+
+    # Find all possible text permutations given a dialed number
+    def letterCombinations(self, digits: str) -> list[str]:
+        digitsMap = {
+            '0' : '', 
+            '1' : '', 
+            '2': 'abc', 
+            '3': 'def', 
+            '4': 'ghi', 
+            '5': 'jkl', 
+            '6': 'mno',
+            '7': 'pqrs',
+            '8': 'tuv', 
+            '9': 'wxyz'}
+        
+        if len(digits) == 0: return ""
+        if len(digits) == 1: return list(digitsMap[digits])
+
+        prev = self.letterCombinations(digits[:-1])
+        next = digitsMap[digits[-1]]
+        return [s + c for s in prev for c in next]
+    
+    # Given integer (n), return all combinations of 
+    # well-formed parentheses 
+    def generateParenthesis_OLD(self, n: int) -> list[str]:
+        if not n: return []
+        elif n == 1: return ["()"]
+        single = "()"
+        ans = ["()"]
+        for i in range(n - 1):
+            temp = list()
+            for s in ans:
+                for j in range(len(s)):
+                    temp.append(s[:j] + single + s[j:])
+            ans = temp
+
+        return list(set(ans))
+
+    # Given integer (n), return all combinations of 
+    # well-formed parentheses 
+    def generateParenthesis(self, n: int) -> list[str]:
+        
+        open = close = 0
+        res = []
+        def generate(open, close, s):
+            if open == close == n:
+                res.append(s)
             
+            if open < n: 
+                generate(open + 1, close, s + "(")
+            if close < open:
+                generate(open, close + 1, s + ")")
+        generate(0, 0, "")
+        return res
+
+    # Search in a possible shifted sorted array for a value
+    def search(self, nums: list[int], target: int) -> int:
+        
+        def M(l, r): return int((l + r) / 2)
+        l = 0
+        r = len(nums) - 1
+        m = M(l, r)
         
         
+        while l <= r:
+            if nums[m] == target: return m
+            
+            if nums[l] <= nums[m]:
+                if nums[l] <= target <= nums[m]:
+                    r = m - 1
+                    m = M(l,r)
+                else:
+                    l = m + 1
+                    m = M(l,r)
+            else:
+                if nums[m] <= target <= nums[r]:
+                    l = m + 1
+                    m = M(l,r)
+                else:
+                    r = m - 1
+                    m = M(l,r)
+        
+        return -1
+        
+    # find the start and ending indices of a target in sorted array
+    def searchRange(self, nums: list[int], target: int) -> list[int]:
+        
+        if target > nums[-1] or target < nums[0]: return [-1, -1]
+
+        # use binary search to find an instance of target
+        # if found
+            # start at found instance
+            # while (start == instance) start--
+            # while (end == instance) end++
+        # else
+            # return [-1, -1]
+        def M(l,r): return (l + r)//2
+
+        l = 0
+        r = len(nums) - 1
+        m = M(l,r)
+        found = -1
+        while l <= r:
+            if nums[m] == target: 
+                found = m
+                break
+                
+            if target < nums[m]:
+                r = m - 1
+                m = M(l,r)
+            else:
+                l = m + 1
+                m = M(l,r)
+
+        if found > -1:
+            l = r = found
+            while nums[l] == target:
+                l-=1
+            while nums[r] == target:
+                r+=1
+            ans = [l + 1, r - 1]
+        else:
+            ans = [-1, -1]
+            
+        return ans
+    
+    def isPalindrome(self, x: int) -> bool:
+        rev_x = str(x).__reversed__
+
+    # add two ints represented as ints
+    # do not convert to ints directly
+    def addStrings(self, num1: str, num2: str) -> str:
+        
+        r = 1
+        carry = 0
+        ans = ""
+        val1 = val2 = 0
+        while r <= len(num1) or r <= len(num2):
+            if r <= len(num1):
+                val1 = int(num1[-r])
+            else:
+                val1 = 0
+            if r <= len(num2):
+                val2 = int(num2[-r])
+            else:
+                val2 = 0
+                
+            sum = val1 + val2 + carry
+            num, carry = sum % 10, sum >= 10
+            
+            ans = str(num) + ans
+            r+=1
+        ans = str(int(carry)) + ans
         return ans
 
 def main():
     solution = Solution()
     
-    height = [1,0,0,0,0,0,0,2,2]
-
-    max = solution.maxArea(height)
-    print(max)
-    
+    print(solution.addStrings("1" ,"9"))
 
 
 if __name__ == "__main__": main()
