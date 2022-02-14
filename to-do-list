@@ -1,15 +1,15 @@
 Must-do Easy questions:
-        13. Roman to Integer
-        20. Valid Parentheses
-        21. Merge Two Sorted Lists
-        141. Linked List Cycle
+-        13. Roman to Integer
+-        20. Valid Parentheses
+-        21. Merge Two Sorted Lists
+-       141. Linked List Cycle
         155. Min Stack
         169. Majority Element
         202. Happy Number
         204. Count Primes
         242. Valid Anagram
         371. Sum of Two Integers
-        88. Merge Sorted Array
+         88. Merge Sorted Array
         108. Convert Sorted Array to Binary Search Tree
         189. Rotate Array
         205. Isomorphic Strings
@@ -29,8 +29,8 @@ Must-do Easy questions:
         1160. Find Words That Can Be Formed by Characters
 
 A comprehensive list of must-do medium problems:
-        5. Longest Palindromic Substring
-        11. Container With Most Water
+-        5. Longest Palindromic Substring
+-        11. Container With Most Water
         17. Letter Combinations of a Phone Number
         22. Generate Parentheses
         33. Search in Rotated Sorted Array
