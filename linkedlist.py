@@ -14,13 +14,13 @@ class MyLinkedList(object):
         :type index: int
         :rtype: int
         """
-        if index < 0 or index >= self.size + 1:
+        if index < 0 or index >= self.size:
             return -1
         if not self.head:
             return -1
         
         curr = self.head
-        for i in range(index + 1):
+        for i in range(index):
             curr = curr.next
             
         return curr.val
@@ -73,7 +73,7 @@ class MyLinkedList(object):
         :rtype: None
         """
         if index < 0 or self.size <= 0: return
-        elif index == 1: 
+        elif index == 0: 
             self.head = self.head.next
             self.size -= 1
             return
@@ -103,9 +103,8 @@ def main():
     testList.addAtHead(1)
     testList.addAtTail(3)
     testList.addAtIndex(1, 2)
-    print(testList.get(1))
+    testList.get(1)
     testList.deleteAtIndex(1)
-    print(testList.get(1))
     testList.print()
 
 if __name__ == '__main__': main()

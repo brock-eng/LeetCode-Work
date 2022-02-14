@@ -217,15 +217,119 @@ class Solution(object):
             totalT += ord(char)
         
         return chr(totalT - totalS)
+
+
+    # Bullshit question from an interview
+    def StringWeight(self, num):
+        cMap = dict({'A' : 1})
+        def CW(c):
+            if c in cMap: return cMap[c]
+            else:
+                coeff = ord(c) - 64 + 1
+                result = coeff * CW(chr(ord(c) - 1))
+                cMap[c] = result
+                return result
+
+        rem = num
+        ans = ''
+        while rem > 0:
+            char = 'A'
+            while CW(char) <= rem:
+                char = chr(ord(char) + 1)
+            char = chr(ord(char) - 1)
+            ans += char
+            rem -= CW(char)
+
+        return ans
+
+    # Given a string s, return the longest palindromic substring in s
+    def longestPalindrome_BAD(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        def isPalindrome(ss):
+            n = 0
+            while n < len(ss)/2:
+                if ss[n] != ss[-(n + 1)]:
+                    return False
+                n += 1
+            return True
+
+        # Init start/end index pointers
+        # Start searching for minimum of palindrome - length 2
+        # If found, start search again, increment length++
+        # If not found, end search and return last found string
+        size = len(s)
+        if size == 0: return ''
+        elif size == 1: return s
+
+        l = 2
+        while l <= size:      
+            st = 0
+            ed = st + l - 1
+            while ed < size:
+                print(s[st:(ed + 1)])
+                if isPalindrome(s[st:(ed + 1)]):
+                    ans = s[st:(ed + 1)]
+                    break
+                ed+=1
+                st+=1
+            l+=1
         
+        return ans
+
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        def helper(ss, l, r):
+            while l >= 0 and r < len(s) and ss[l] == s[r]:
+                l-=1
+                r+=1
+            return ss[l+1: r]
+
+        ans = ''
+        for i in range(len(s)):
+            ans = max(helper(s, i, i), helper(s, i, i+1), ans, key=len)
+
+        return ans
+
+    def maxArea(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        def V(l, r, d):
+            return min(l, r) * d
+
+        if len(height) <= 1: return 0
+        
+        # start with left = 0 and right = (end of height)
+        l = 0
+        r = len(height) - 1
+        ans = V(height[l], height[r], r - l)
+        while l < r:
+            if height[l] < height[r]:
+                l+=1
+                ans = max(V(height[l], height[r], r - l), ans)
+            else:
+                r-=1
+                ans = max(V(height[l], height[r], r - 1), ans)
+            
+        
+        
+        return ans
 
 def main():
     solution = Solution()
+    
+    height = [1,0,0,0,0,0,0,2,2]
 
-    nums = [1,2,2,3,4,5,5, 5, 5,6,6,7,7,7,7,7]
-    intvalue = solution.removeDuplicates2(nums, 4)
-    print(nums)
-    print(intvalue)
+    max = solution.maxArea(height)
+    print(max)
+    
 
 
 if __name__ == "__main__": main()
