@@ -445,24 +445,34 @@ class Solution(object):
             
         return ans
     
+    # determine if an input num is a palindrome
     def isPalindrome(self, x: int) -> bool:
-        rev_x = str(x).__reversed__
+        digits = []
+        while x > 0:
+            digits.append(x % 10)
+            x //= 10
+        while len(digits) > 1:
+            if digits.pop(0) != digits.pop():
+                return False
+        return True
 
     # add two ints represented as ints
     # do not convert to ints directly
     def addStrings(self, num1: str, num2: str) -> str:
         
+        cn = lambda c : ord(c) - ord('0')
+
         r = 1
         carry = 0
         ans = ""
         val1 = val2 = 0
         while r <= len(num1) or r <= len(num2):
             if r <= len(num1):
-                val1 = int(num1[-r])
+                val1 = cn(num1[-r])
             else:
                 val1 = 0
             if r <= len(num2):
-                val2 = int(num2[-r])
+                val2 = cn(num2[-r])
             else:
                 val2 = 0
                 
@@ -472,12 +482,63 @@ class Solution(object):
             ans = str(num) + ans
             r+=1
         ans = str(int(carry)) + ans
-        return ans
+        return ans if ans[0] != '0' else ans[1:]
+
+    # Return if a number is happy (true/false)
+    # number is happy if the recursive sum of its
+    # squared digits eventually reaches zero
+    def isHappy(self, n: int) -> bool:
+        def nextNum(n):
+            sum = 0
+            while n > 0:
+                d = n % 10
+                n = n // 10
+                sum+= d * d
+            return sum
+
+        nf = nextNum(n)
+        while nf != 1 and nf != n:
+            nf = nextNum(nextNum(nf))
+            n = nextNum(n)
+            
+        return nf == 1
+    
+    # Swap adjacent pairs in a linked list - return the head of the edited list
+    def swapPairs(self, head) -> ListNode:
+        
+        if not head or not head.next: return head
+        
+        newstart = head.next.next
+        head, head.next = head.next, head
+        head.next.next = self.swapPairs(newstart)
+        
+        return head
+
+    # divide two integers, can only use addition, subtraction, bit shifts
+    # assume maximum return value is constrained by 32 bit system
+    def divide(self, dividend: int, divisor: int) -> int:
+        sign = 1 if (dividend > 0) is (divisor > 0) else -1
+        
+        dividend, divisor = abs(dividend), abs(divisor)
+        res = 0
+        while dividend >= divisor:
+            
+            curr, i = divisor, 1
+            
+            while curr <= dividend:
+                dividend -= curr
+                res += i
+                
+                curr <<= 1
+                i <<= 1
+        
+        maxint = 2 ** 31 - 1
+        return min(maxint, res) if sign == 1 else max(-maxint - 1, -res)
 
 def main():
     solution = Solution()
+
     
-    print(solution.addStrings("1" ,"9"))
 
 
 if __name__ == "__main__": main()
