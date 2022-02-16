@@ -1,5 +1,6 @@
+from collections import defaultdict
 from inspect import stack
-
+import time
 
 class ListNode(object):
     def __init__(self, val=0, next=None):
@@ -535,10 +536,184 @@ class Solution(object):
         maxint = 2 ** 31 - 1
         return min(maxint, res) if sign == 1 else max(-maxint - 1, -res)
 
+    # find all permutations for a given list of ints
+    # assume all values are unique
+    def permute(self, nums: list[int]) -> list[list[int]]:
+        
+        res = []
+        def dfs(dec_space, fixed_path):
+            if not dec_space: 
+                res.append(fixed_path)
+                return
+            for i in range(len(dec_space)):
+                dfs(dec_space[:i] + dec_space[i + 1:], fixed_path + [dec_space[i]])
+        dfs(nums, [])
+
+        return res
+
+    # return all unique permutations given a list with possible
+    # duplicate nums
+    def permuteUnique(self, nums: list[int]) -> list[list[int]]:
+        
+        res = []
+        def dfs(dec_space, fixed_path):
+            if not dec_space: 
+                res.append(fixed_path)
+                return
+            uniqueValues = set()
+            for i in range(len(dec_space)):
+                if dec_space[i] not in uniqueValues:
+                    uniqueValues.add(dec_space[i])
+                    dfs(dec_space[:i] + dec_space[i + 1:], fixed_path + [dec_space[i]])
+        dfs(nums, [])
+
+        return res
+
+    def rotate(self, matrix: list[list[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix[0])
+        
+        # UPL (0 + c, 0) -> (n, 0 + c)
+        # UPR (0, n) -> (n, n)
+        # LR  (n, n) -> (0, n)
+        # LL  (0, 2) -> (0, 0)
+        s = n - 1
+        for row in range(n // 2 + n % 2):
+            for col in range(n // 2):
+                tmp = matrix[row][col]
+                matrix[row][col] = matrix[col][s-row]
+                matrix[col][s-row] = matrix[s - row][s - col]                
+                matrix[s - row][s - col] = matrix[s - col][row]
+                matrix[s - col][row] = tmp
+
+    # given a list of words/strings, group all anagrams together
+    # anagram -> eat, ate, tea
+    # not anagram -> hello, hell, hi, hillo
+    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:
+
+        res = []
+        matches = dict()
+
+        for s in strs:
+            ss = ''.join(sorted(s))
+            if ss not in matches.keys():
+                matches[ss] = [s]
+            else:
+                matches[ss].append(s)
+
+        for key in matches:
+            res.append(matches[key])
+        return res
+
+    # Given an array of intervals where interval[i] = [start, end]
+    # merge overlapping intervals
+    def merge(self, intervals: list[list[int]]) -> list[list[int]]:
+
+        # pseudo
+        # [s1, e1] [s2, e2]
+        # for each interval in intervals:
+        #   if e1 > e2:
+        #       add new interval
+        #   elif e1 <= e2:
+        #       merged previous interval
+
+        if len(intervals) == 1: return intervals
+        merged = []
+        intervals.sort()
+        
+        for interval in intervals:
+            if not merged or merged[-1][1] < interval[0]:
+                merged.append(interval)
+            
+            else:
+                merged[-1][1] = max(merged[-1][1], interval[1])
+        
+        return merged
+
+    # given a string (s) and a string (p), find all starting indices where
+    # the substring defined by s[i:i + p_size] is an anagram of p
+    def findAnagrams(self, s: str, p: str) -> list[int]:
+        
+        # edge case handling, init sizes and result array
+        if not s or not p: return []
+        p_size, s_size, res = len(p), len(s), []
+        if p_size > s_size: return []
+        
+        # build a hashmap, 
+        # init values for each char in p to += 1
+        trackedChars = defaultdict(int)
+        for c in p: 
+            trackedChars[c] += 1
+        
+        # create initial window pass
+        for c in s[0:p_size]:
+            if c in trackedChars:
+                trackedChars[c] -= 1
+
+        # test for first case
+        if all(value == 0 for value in trackedChars.values()):
+            res.append(start)
+
+        # iterate through the rest of the string s
+        start = 0
+        while start + p_size < s_size:
+            start+=1
+            # if a char exits the window, tracked -= 1
+            if s[start - 1] in trackedChars:
+                trackedChars[s[start - 1]] += 1
+            # if a char enters the window, tracked += 1
+            if s[start + p_size - 1] in  trackedChars:
+                trackedChars[s[start + p_size - 1]] -= 1
+
+            if all(value == 0 for value in trackedChars.values()):
+                res.append(start)
+
+        return res
+
+    # Given an array of ints comprised of 1, 2, 3,
+    # sort the array in place
+    def sortColors(self, nums: list[int]) -> None:
+        """
+        Execute in place
+        """
+
+        # 0 -> left handed side
+        # 1 -> placed in center
+        # 2 -> right handed side
+
+        # 0 count, 2 count -> l, r
+        def swap(x, y):
+            t = nums[x]
+            nums[x] = nums[y]
+            nums[y] = t
+
+        # iterate through array
+        l, r = 0, len(nums) - 1
+        index = 0
+        while index < len(nums):
+            if nums[index] == 0 and index > l:
+                swap(index, l)
+                l += 1
+                index -= 1
+            elif nums[index] == 2 and index < r:
+                swap(index, r)
+                r -= 1
+                index -= 1
+            index += 1
+                
+        
+
+
+        
+        
+
 def main():
     solution = Solution()
-
     
-
+    nums = [2, 1, 0, 1, 2]
+    solution.sortColors(nums)
+    print(nums)
 
 if __name__ == "__main__": main()
