@@ -7,6 +7,12 @@ class ListNode(object):
         self.val = val
         self.next = next
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
 class Solution(object):
     
     # Given an integer, convert to roman numerals
@@ -569,6 +575,8 @@ class Solution(object):
 
         return res
 
+    # Given a matrix (2D array), 
+    # rotate the matrix 90 degrees CW
     def rotate(self, matrix: list[list[int]]) -> None:
         """
         Do not return anything, modify matrix in-place instead.
@@ -692,28 +700,74 @@ class Solution(object):
         # iterate through array
         l, r = 0, len(nums) - 1
         index = 0
-        while index < len(nums):
+        while index < r:
             if nums[index] == 0 and index > l:
                 swap(index, l)
                 l += 1
-                index -= 1
             elif nums[index] == 2 and index < r:
                 swap(index, r)
                 r -= 1
-                index -= 1
-            index += 1
-                
-        
+            else:
+                index+=1
 
+    # Convert a sorted array to a height balanced binary tree
+    def sortedArrayToBST(self, nums: list[int]):
+        if not nums: return
+        if len(nums) == 1: return TreeNode(val=nums[0])
+        else:
+            mid = len(nums) // 2
+            newNode = TreeNode(val = nums[mid],\
+                left = self.sortedArrayToBST(nums[0:mid]),\
+                right = self.sortedArrayToBST(nums[mid + 1: len(nums)]))
+            return newNode
 
+    # Traverse a binary tree inorder (left->right) and return
+    # the result as an array
+    def inorderTraversal(self, root) -> list[int]:
+        res = []
         
+        def helper(root):
+            if root:
+                helper(root.left)
+                res.append(root.val)
+                helper(root.right)
         
+        helper(root)
+        return res
+
+    # Return a list of each level (top->bottom) in a binary tree
+    def levelOrder(self, root) -> list[list[int]]:
+        
+        # input tree nodes
+        # for each tree node, add left, right branch to list
+        # add list to result
+        # call function recursively for new list
+        res = []
+        def helper(treeList: list[TreeNode]):
+            if len(treeList) == 0: return
+            currvalues = [node.val for node in treeList]
+            res.append(currvalues)
+            
+            nextNodes = []
+            for node in treeList:
+                if node.left: nextNodes.append(node.left)
+                if node.right: nextNodes.append(node.right)
+            helper(nextNodes)
+            
+        if root: helper([root])
+        return res
+            
 
 def main():
     solution = Solution()
-    
-    nums = [2, 1, 0, 1, 2]
+    nums = [2, 1, 0, 1, 2, 1, 0, 2, 1, 1, 0, 0, 2, 2]
+    start = time.perf_counter_ns()
+    # # # Put executable problems below
+
     solution.sortColors(nums)
     print(nums)
+    # # #
+    end = time.perf_counter_ns()
+    print("Execution time: ", (end - start)*1e-6)
 
 if __name__ == "__main__": main()
