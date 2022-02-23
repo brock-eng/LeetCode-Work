@@ -756,16 +756,58 @@ class Solution(object):
             
         if root: helper([root])
         return res
-            
+
+    # Given an array of size n with nums in range [1, n-1]
+    # find and return the duplicate num
+    def findDuplicates(self, nums: list[int]) -> int:
+        
+        t = nums[0]
+        h = nums[0]
+        t, h = nums[t], nums[nums[h]]
+        while t != h:
+            t, h = nums[t], nums[nums[h]]
+        t = nums[0]
+        while t != h:
+            t, h = nums[t], nums[h]
+        return t
+
+    # Build a binary tree from two integer arrays
+    # representing the inorder and postorder traversals
+    def buildTree(self, inorder: list[int], postorder: list[int]):
+        if not inorder or not postorder: return None
+        
+        root = TreeNode()
+        root.val = postorder.pop()
+        inorderRoot = inorder.index(root.val)
+
+        root.right = self.buildTree(inorder[inorderRoot + 1:], postorder)
+        root.left = self.buildTree(inorder[:inorderRoot], postorder)
+
+        return root
+
+    # Build a binary tree from two integer arrays
+    # representing the inorder and preorder traversals
+    def buildTreePre(self, inorder: list[int], preorder: list[int]):
+        if not inorder or not preorder: return None
+        
+        root = TreeNode()
+        root.val = preorder.pop(0)
+        inorderRoot = inorder.index(root.val)
+
+        root.left = self.buildTreePre(inorder[:inorderRoot], preorder)
+        root.right = self.buildTreePre(inorder[inorderRoot + 1:], preorder)
+
+        return root
 
 def main():
     solution = Solution()
-    nums = [2, 1, 0, 1, 2, 1, 0, 2, 1, 1, 0, 0, 2, 2]
+    nums = [1, 2, 4, 3, 5, 8, 7, 6, 4]
+    preorder = [3,9,20,15,7]
+    inorder = [9,3,15,20,7]
     start = time.perf_counter_ns()
     # # # Put executable problems below
 
-    solution.sortColors(nums)
-    print(nums)
+    ans = solution.buildTreePre(inorder, preorder)
     # # #
     end = time.perf_counter_ns()
     print("Execution time: ", (end - start)*1e-6)
