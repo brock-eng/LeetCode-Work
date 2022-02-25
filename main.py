@@ -7,6 +7,12 @@ class ListNode(object):
         self.val = val
         self.next = next
 
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -799,15 +805,153 @@ class Solution(object):
 
         return root
 
+    # given a binary tree, populate each node with 
+    # the node to the right as node.next
+    def connect(self, root: 'Node') -> 'Node':
+
+        if not root: return
+        
+        def helper(nodeList):
+            if not nodeList: return
+            nList = list()
+            for node in nodeList:
+                if node.left: nList.append(node.left)
+                if node.right: nList.append(node.right)
+                
+            for index in range(len(nList) - 1):
+                nList[index].next = nList[index + 1]
+            helper(nList)
+        
+        helper([root])
+        
+        return root
+
+    # Given an array nums where all nums appear 3 times except
+    # one num, find the single occurrence
+    def singleNumber(self, nums):
+        
+        a = b = 0
+        for num in nums:
+            a = (a ^ num) & ~b
+            b = (b ^ num) & ~a
+
+        return a | b
+
+    # Given a linked list where each node points to a random
+    # point in the list, create a hard/deep copy of the list
+    def copyRandomList(self, head: Node):
+        if not head: return
+        
+        # Copy linked list, intersperse into current list
+        root = head
+        copyHead = Node(root.val, next=root.next)
+        copy = copyHead
+        while head:
+            head.next = copy
+            head = copy.next
+            if head:
+                copy = Node(head.val, next=head.next)
+
+        # assign random values to copied list
+        head = root
+        while head:
+            copy = head.next
+            if head.random:
+                copy.random = head.random.next
+            head = head.next.next
+
+        # seperate lists
+        head = root
+        while head:
+            copy = head.next
+            head.next = copy.next
+            if head.next:
+                copy.next = head.next.next
+            else:
+                copy.next = None
+            head = head.next
+
+        return copyHead
+
+    # given a linked list, return the node where a 
+    # cycle begins, if applicable
+    def detectCycle(self, head: ListNode):
+        if not head: return
+        
+        slow, fast = head, head.next
+        
+        while True:
+            if not (slow.next and fast.next and fast.next.next):
+                return -1
+            
+            if slow == fast: 
+                break
+                
+            slow = slow.next
+            fast = fast.next.next
+        
+        root = head
+        while root != slow:
+            root = root.next
+            slow = slow.next
+        
+        return root
+        
+        
+    def projectEuler(self, num):
+        def fac(n):
+            res, i = n, 1
+            while i < n:
+                res *= (n - i)
+                i+=1
+            
+            return res
+
+           
+        def sf(n):
+            sum = 0
+            while n > 0:
+                sum += fac(n % 10)
+                n //= 10
+            
+            return sum
+
+        def sd(n):
+            sum = 0
+            while n >0:
+                sum += n % 10
+                n //= 10
+            
+            return sum
+
+        def g(i):
+            res = 1
+            while sd(sf(res)) != i:
+                res += 1
+            
+            return res
+
+        def sg(i):
+            return sd(g(i))
+        
+        return sg(num)
+
 def main():
     solution = Solution()
     nums = [1, 2, 4, 3, 5, 8, 7, 6, 4]
     preorder = [3,9,20,15,7]
     inorder = [9,3,15,20,7]
+
+
     start = time.perf_counter_ns()
     # # # Put executable problems below
+    nums = [i for i in range(1, 21)]
 
-    ans = solution.buildTreePre(inorder, preorder)
+    sum = 0
+    for num in nums:
+        sum += solution.projectEuler(num)
+
+    print(sum)
     # # #
     end = time.perf_counter_ns()
     print("Execution time: ", (end - start)*1e-6)
