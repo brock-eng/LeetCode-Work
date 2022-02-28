@@ -897,7 +897,7 @@ class Solution(object):
         
         return root
         
-        
+    # Long ass question from hackerrank
     def projectEuler(self, num):
         def fac(n):
             res, i = n, 1
@@ -936,22 +936,40 @@ class Solution(object):
         
         return sg(num)
 
+    # Reverse an integer (by digits 321 -> 123)
+    def reverse(self, x: int) -> int:
+        ans = []
+
+        sign = 1 if x >= 0 else -1
+        x = abs(x)
+
+        while x > 0:
+            digit = x % 10
+            x //= 10
+            ans.append(digit)
+        
+        rev = 0
+        p = len(ans) - 1
+        for num in ans:
+            rev += num * 10**p
+            p-=1
+
+        rev *= sign
+        rev = 0 if (rev > 2**31 - 1 or rev < -2**31) else rev
+        return rev
+
 def main():
     solution = Solution()
     nums = [1, 2, 4, 3, 5, 8, 7, 6, 4]
     preorder = [3,9,20,15,7]
     inorder = [9,3,15,20,7]
-
+    num = -123456789**32
 
     start = time.perf_counter_ns()
     # # # Put executable problems below
-    nums = [i for i in range(1, 21)]
+    ans = solution.reverse(num)
 
-    sum = 0
-    for num in nums:
-        sum += solution.projectEuler(num)
-
-    print(sum)
+    print(ans)
     # # #
     end = time.perf_counter_ns()
     print("Execution time: ", (end - start)*1e-6)
