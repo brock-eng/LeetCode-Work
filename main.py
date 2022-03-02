@@ -2,6 +2,12 @@ from collections import defaultdict
 from inspect import stack
 import time
 
+# Doubly linked list node
+class DNode:
+    def __init__(self, key, val):
+        self.key, self.val = key, val
+        self.prev = self.next = None
+
 class ListNode(object):
     def __init__(self, val=0, next=None):
         self.val = val
@@ -936,7 +942,7 @@ class Solution(object):
         
         return sg(num)
 
-    # Reverse an integer (by digits 321 -> 123)
+    # Reverse an integer (321 -> 123)
     def reverse(self, x: int) -> int:
         ans = []
 
@@ -958,20 +964,129 @@ class Solution(object):
         rev = 0 if (rev > 2**31 - 1 or rev < -2**31) else rev
         return rev
 
+    # Insertion sort a linked list
+    def insertionSortList(self, head: ListNode) -> ListNode:       
+        start = ListNode()
+        curr = head
+        
+        while curr:
+            prev, next = start, start.next
+            
+            while next and curr.val > next.val:
+                prev = next
+                next = next.next
+            
+            prev.next = curr
+            d = curr.next
+            curr.next = next
+            curr = d
+            
+        return start.next
+
+    # given a string of words, reverse the words in the string
+    # return the result
+    def reverseWords(self, s: str) -> str:
+        
+        # create empty list
+        words = []
+        
+        # parse words from string and append into list
+        words = s.strip().split(' ')
+        
+        
+        # iterate through list in reverse order
+        #   for each word, add to new string "result"
+        words.reverse()
+        ans = ' '.join(words)
+
+        # output reversed string
+        return ans
+
+    # count the number of 1 bits in binary representation of
+    # a number
+    def countBits(self, num: int) -> int:
+        count = 0
+        while num > 0:
+            if (1 & num):
+                count += 1
+            num >>= 1
+
+        return count
+
+    # Given two nums, return the fraction in string format
+    def fractionToDecimal(self, n: int, d: int) -> str:
+        # d [-n
+        sign = '-' if n * d < 0 else ''
+        n, d = abs(n), abs(d)
+        i = n // d
+        n %= d # remainder
+        if not n: return str(i)
+        ans = sign + str(i)
+
+        seen = dict()
+        dec = ""
+        i = 0
+        while n > 0:
+            if n < d:
+                n *= 10
+            r = n // d
+            n %= d
+            dec += str(r)
+            if n in seen:
+                ans += "." + dec[:seen[n]] + "(" + dec[seen[n]:] + ")"
+                return ans
+            i += 1
+            seen[n] = i
+
+        ans += "." + dec
+        return ans
+
+    # given a 2d array of 1s and 0s that represents land (1)
+    # and water (0), return number of islands
+    def numIslands(self, grid: list[list[str]]) -> int:
+        ans = 0
+        m, n = len(grid), len(grid[0])
+        
+        seen = [False] * n * m
+        def reduce(x, y):
+            if x < 0 or x >= n or y < 0 or y >= m: return
+            if grid[y][x] == '0': return
+            if seen[x + y*n]: return
+
+            seen[x + y*n] = True
+
+            reduce(x+1, y)
+            reduce(x, y+1)
+            reduce(x-1, y)
+            reduce(x, y-1)
+        
+
+        for y in range(m):
+            for x in range(n):
+                if grid[y][x] == "1" and not seen[x + y*n]:
+                    reduce(x, y)
+                    ans += 1
+        
+        return ans
+
 def main():
     solution = Solution()
     nums = [1, 2, 4, 3, 5, 8, 7, 6, 4]
-    preorder = [3,9,20,15,7]
-    inorder = [9,3,15,20,7]
-    num = -123456789**32
-
+    num = 512
     start = time.perf_counter_ns()
-    # # # Put executable problems below
-    ans = solution.reverse(num)
 
+    grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+
+    # # # Put executable problems below
+    ans = solution.numIslands(grid)
     print(ans)
     # # #
     end = time.perf_counter_ns()
-    print("Execution time: ", (end - start)*1e-6)
+    print("Execution time: ", (end - start)*1e-6, "[ms]")
 
 if __name__ == "__main__": main()
