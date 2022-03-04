@@ -1,6 +1,7 @@
 from collections import defaultdict
 from inspect import stack
 import time
+from xmlrpc.client import MAXINT
 
 # Doubly linked list node
 class DNode:
@@ -1014,6 +1015,7 @@ class Solution(object):
         return count
 
     # Given two nums, return the fraction in string format
+    # Repeating part should be encased in parenthesis
     def fractionToDecimal(self, n: int, d: int) -> str:
         # d [-n
         sign = '-' if n * d < 0 else ''
@@ -1048,6 +1050,7 @@ class Solution(object):
         m, n = len(grid), len(grid[0])
         
         seen = [False] * n * m
+
         def reduce(x, y):
             if x < 0 or x >= n or y < 0 or y >= m: return
             if grid[y][x] == '0': return
@@ -1059,8 +1062,7 @@ class Solution(object):
             reduce(x, y+1)
             reduce(x-1, y)
             reduce(x, y-1)
-        
-
+ 
         for y in range(m):
             for x in range(n):
                 if grid[y][x] == "1" and not seen[x + y*n]:
@@ -1068,6 +1070,99 @@ class Solution(object):
                     ans += 1
         
         return ans
+
+    # Given a list of prerequisistes and n-> number of classes,
+    # determine if the course list is completeable as true/false
+    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
+        courseReq = [[] for _ in range(numCourses)]
+        visited   = [0 for _ in range(numCourses)]
+
+        for course, prereq in prerequisites:
+            courseReq[course].append(prereq)
+        
+        def dfs(index):
+            if visited[index] == -1: return False
+            if visited[index] == 1: return True
+            visited[index] = -1
+
+            for neighbour in courseReq[index]:
+                if not dfs(neighbour):
+                    return False
+
+            visited[index] = 1
+            return True
+
+        for index in range(numCourses):
+            if not dfs(index):
+                return False
+
+        return True
+
+    # Given a course list and prereqs, return the ordering of courses
+    # you should take to complete all courses
+    def findOrder(self, numCourses: int, prerequisites: list[list[int]]) -> list[int]:
+        courseReq = [[] for _ in range(numCourses)]
+        visited   = [0 for _ in range(numCourses)]
+        order = []
+        for course, prereq in prerequisites:
+            courseReq[course].append(prereq)
+
+        def dfs(index):
+            if visited[index] == -1: return False
+            if visited[index] == 1: return True
+            visited[index] = -1
+
+            for neighbour in courseReq[index]:
+                if not dfs(neighbour):
+                    return False
+                
+            order.append(index)
+            visited[index] = 1
+            return True
+
+        for index in range(numCourses):
+            if not dfs(index):
+                return False
+    
+        return order       
+
+
+    # implementation of lazy dijstra algorithm
+    # input format [node_start, node_finish, path_weight]
+    def LazyDijkstra(self, edges: list[list], numNodes: int, start:int = 0, end:int = -1) -> list:
+        if end == -1: end = numNodes - 1
+        dist, path = dict(), dict()
+        for n in range(numNodes):
+            dist[n], path[n] = MAXINT, None
+        dist[0], path[0] = 0, "Start"
+        adjList = [[] for _ in range(numNodes)]
+        for edge in edges:
+            adjList[edge[0]].append([edge[1], edge[2]])
+        pq = []
+        pq.append((0, 0))
+
+        while len(pq) != 0:
+            index, minValue = pq.pop(0)
+            if dist[index] < minValue: continue
+            for edge in adjList[index]:
+                newDist = dist[index] + edge[1]
+                if newDist < dist[edge[0]]:
+                    dist[edge[0]] = newDist
+                    path[edge[0]] = index
+                    pq.append((edge[0], newDist))
+
+        # get shortest path
+        prev = []
+        last = path[end]
+        if not last: return [-1]
+        while last != "Start":
+            prev.append(last)
+            last = path[last]
+        prev.reverse()
+        prev.append(end)
+        prev.append("Distance: " + str(dist[end]))
+        return prev
+
 
 def main():
     solution = Solution()
@@ -1082,8 +1177,23 @@ def main():
   ["0","0","0","1","1"]
 ]
 
+    prereqs = [[1,0],[2,0],[3,1],[3,2]]
+
+    dijkstraSample = [
+        [0, 1, 4],
+        [0, 2, 1],
+        [1, 3, 1],
+        [2, 1, 2],
+        [2, 3, 5],
+        [3, 4, 3],
+        [1, 4, 1],
+        [3, 5, 4],
+        [4, 5, 1],
+        [2, 5, 20]
+    ]
+    numNodes = 7
     # # # Put executable problems below
-    ans = solution.numIslands(grid)
+    ans = solution.findOrder(4, prereqs)
     print(ans)
     # # #
     end = time.perf_counter_ns()
