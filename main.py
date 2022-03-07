@@ -3,6 +3,8 @@ from inspect import stack
 import time
 from xmlrpc.client import MAXINT
 
+from graph import Graph
+
 # Doubly linked list node
 class DNode:
     def __init__(self, key, val):
@@ -1124,51 +1126,29 @@ class Solution(object):
             if not dfs(index):
                 return False
     
-        return order       
+        return order      
 
+    def FindNumMatches(self, a, b) :
+        indexA, indexB = 0, 0
+        ans = []
+        while indexA < len(a) and indexB < len(b):
+            if a[indexA] == b[indexB]:
+                ans.append(a[indexA])
+                indexA += 1
+                indexB += 1
+            elif a[indexA] < b[indexB]:
+                indexA += 1
+            else:
+                indexB += 1
 
-    # implementation of lazy dijstra algorithm
-    # input format [node_start, node_finish, path_weight]
-    def LazyDijkstra(self, edges: list[list], numNodes: int, start:int = 0, end:int = -1) -> list:
-        if end == -1: end = numNodes - 1
-        dist, path = dict(), dict()
-        for n in range(numNodes):
-            dist[n], path[n] = MAXINT, None
-        dist[0], path[0] = 0, "Start"
-        adjList = [[] for _ in range(numNodes)]
-        for edge in edges:
-            adjList[edge[0]].append([edge[1], edge[2]])
-        pq = []
-        pq.append((0, 0))
-
-        while len(pq) != 0:
-            index, minValue = pq.pop(0)
-            if dist[index] < minValue: continue
-            for edge in adjList[index]:
-                newDist = dist[index] + edge[1]
-                if newDist < dist[edge[0]]:
-                    dist[edge[0]] = newDist
-                    path[edge[0]] = index
-                    pq.append((edge[0], newDist))
-
-        # get shortest path
-        prev = []
-        last = path[end]
-        if not last: return [-1]
-        while last != "Start":
-            prev.append(last)
-            last = path[last]
-        prev.reverse()
-        prev.append(end)
-        prev.append("Distance: " + str(dist[end]))
-        return prev
+        return ans
 
 
 def main():
     solution = Solution()
+    graphTester = Graph()
     nums = [1, 2, 4, 3, 5, 8, 7, 6, 4]
     num = 512
-    start = time.perf_counter_ns()
 
     grid = [
   ["1","1","0","0","0"],
@@ -1178,25 +1158,35 @@ def main():
 ]
 
     prereqs = [[1,0],[2,0],[3,1],[3,2]]
-
+    a = [50, 1, 2, 3, 5, 7, 9, 20]
+    b = [5, 6, 8, 9, 20, 40]
     dijkstraSample = [
-        [0, 1, 4],
-        [0, 2, 1],
-        [1, 3, 1],
-        [2, 1, 2],
-        [2, 3, 5],
-        [3, 4, 3],
-        [1, 4, 1],
-        [3, 5, 4],
-        [4, 5, 1],
-        [2, 5, 20]
+        [0, 1, 5],
+        [1, 6, 60],
+        [6, 7 , -50],
+        [7, 8, -10],
+        [1, 5, 30],
+        [1, 2, 20],
+        [2, 3, 10],
+        [3, 2, -15],
+        [2, 4, 75],
+        [4, 9, 100],
+        [5, 6, 5],
+        [5, 4, 25], 
+        [5, 8, 50]
     ]
-    numNodes = 7
-    # # # Put executable problems below
-    ans = solution.findOrder(4, prereqs)
-    print(ans)
-    # # #
+    numNodes = 10
+
+    start = time.perf_counter_ns()
+    # # # ----------------------------- # # #
+
+    # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
+    ans = solution.FindNumMatches(a, b)
+    
+
+    # # # ----------------------------- # # #
     end = time.perf_counter_ns()
+    print(ans)
     print("Execution time: ", (end - start)*1e-6, "[ms]")
 
 if __name__ == "__main__": main()
