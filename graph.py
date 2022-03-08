@@ -1,3 +1,4 @@
+from operator import truediv
 from xmlrpc.client import MAXINT
 
 class Graph:
@@ -64,8 +65,33 @@ class Graph:
 
     # find bridges in a graph
     def FindBridges(self, edges: list[list], numNodes: int) -> list:
+        adjList = [[] for _ in range(numNodes)]
+        for edge in edges:
+            adjList[edge[0]].append(edge[1])
+            adjList[edge[1]].append(edge[0])
+
         ids = [0] * numNodes
         low = [0] * numNodes
         visited = [False] * numNodes
+        bridges = []
 
-        return
+        def dfs(n, pn, id):
+            visited[n] = True
+            id += 1
+            low[n] = ids[n] = id
+
+            for to in adjList[n]:
+                if to == pn: continue
+                if not visited[to]:
+                    dfs(to, n, id)
+                    low[n] = min(low[n], low[to])
+                    if ids[n] < low[to]:
+                        bridges.append([n, to])
+                else:
+                    low[n] = min(low[n], ids[to])
+
+        for i in range(numNodes):
+            if not visited[i]:
+                dfs(i, -1, 0)
+        
+        return bridges

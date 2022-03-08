@@ -1,4 +1,5 @@
 from collections import defaultdict
+import functools
 from inspect import stack
 import time
 from xmlrpc.client import MAXINT
@@ -1128,6 +1129,7 @@ class Solution(object):
     
         return order      
 
+    # Find matches between two sorted arrays
     def FindNumMatches(self, a, b) :
         indexA, indexB = 0, 0
         ans = []
@@ -1143,11 +1145,53 @@ class Solution(object):
 
         return ans
 
+    # Given an array of non-negative integers nums, 
+    # you are initially positioned at the first index of the array.
+    # The value at each index is the amount of indices you can jump.
+    # Find the minimum amount of required jumps for a given array.
+    def jump(self, nums: list[int]) -> int:
+        
+        s = len(nums)
+        N = [0] * s
+        if s <= 0: return 1
+        
+        for i in range(s - 1, -1, -1):
+            stepSize = nums[i]
+            if stepSize + i >= s:
+                N[i] = 1
+            else:
+                N[i] = 1 + min(N[i + 1:i + 1 + stepSize])
+        
+        return N[0] - 1
+
+    # You are given an integer array nums. 
+    # You want to maximize the number of points you get where points are nums[i]
+    # When taking a num, delete num-1 and num+2 from array.  
+    # Return max number of points
+    def deleteAndEarn(self, nums: list[int]) -> int:
+        totals = defaultdict(int)
+        maxNumber = 0
+        for num in nums:
+            if num in totals:
+                totals[num] += num
+            else:
+                totals[num] = num
+            if num > maxNumber:
+                maxNumber = num
+        
+        @functools.cache
+        def mp(num):
+            if num == 0: return 0
+            if num == 1: return totals[1]
+            else:
+                return max(totals[num] + mp(num - 2), mp(num - 1))
+            
+        return mp(maxNumber)
 
 def main():
     solution = Solution()
     graphTester = Graph()
-    nums = [1, 2, 4, 3, 5, 8, 7, 6, 4]
+    nums = [2,3,1,1,4]
     num = 512
 
     grid = [
@@ -1160,6 +1204,9 @@ def main():
     prereqs = [[1,0],[2,0],[3,1],[3,2]]
     a = [50, 1, 2, 3, 5, 7, 9, 20]
     b = [5, 6, 8, 9, 20, 40]
+    num = [3,4,2]
+
+
     dijkstraSample = [
         [0, 1, 5],
         [1, 6, 60],
@@ -1175,13 +1222,27 @@ def main():
         [5, 4, 25], 
         [5, 8, 50]
     ]
-    numNodes = 10
+    bridgeGraphSample = [
+        [0, 1],
+        [2, 0],
+        [1, 2],
+        [2, 3],
+        [3, 4],
+        [2, 5],
+        [5, 6],
+        [6, 7],
+        [7, 8],
+        [8, 5],
+        [2, 4]
+    ]
+    numNodes = [i for i in range(0, 11)]
 
     start = time.perf_counter_ns()
     # # # ----------------------------- # # #
 
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
-    ans = solution.FindNumMatches(a, b)
+    # ans = solution.FindNumMatches(a, b)
+    ans = solution.deleteAndEarn(numNodes)
     
 
     # # # ----------------------------- # # #
