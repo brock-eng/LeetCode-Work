@@ -1,6 +1,5 @@
 from collections import defaultdict
 import functools
-from inspect import stack
 import time
 from xmlrpc.client import MAXINT
 
@@ -1188,6 +1187,34 @@ class Solution(object):
             
         return mp(maxNumber)
 
+    # Return all unique triples of nums that sum to 0
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
+        def twoSum(index):
+            seen = set()
+            for i, num in enumerate(nums):
+                if i != index:
+                    if (nums[index] + num) in seen:
+                        return [nums[index], num, nums[index] + num], True
+                    else:
+                        seen.add(num)
+                    
+            return [], False
+        
+        sums = dict()
+        ans = []
+        for index, num in enumerate(nums):
+            if num in sums:
+                continue
+            else:
+                sums[num], found = twoSum(index)
+                for n in sums[num]:
+                    sums[n] = sums[num]
+                if found: ans.append(sums[num]) 
+        
+        for a in ans:
+            a.sort()
+        return ans
+
 def main():
     solution = Solution()
     graphTester = Graph()
@@ -1236,13 +1263,13 @@ def main():
         [2, 4]
     ]
     numNodes = [i for i in range(0, 11)]
-
+    nums = [-1,0,1,2,-1,-4]
     start = time.perf_counter_ns()
     # # # ----------------------------- # # #
 
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
     # ans = solution.FindNumMatches(a, b)
-    ans = solution.deleteAndEarn(numNodes)
+    ans = solution.threeSum(nums)
     
 
     # # # ----------------------------- # # #
