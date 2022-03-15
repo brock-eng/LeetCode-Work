@@ -14,7 +14,6 @@ class LRUCache:
         self.left, self.right = DNode(0, 0), DNode(0, 0)
         self.left.next, self.right.prev = self.right, self.left
 
-
     def remove(self, node: DNode):
         next, prev = node.next, node.prev
         prev.next = next

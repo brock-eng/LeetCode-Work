@@ -916,7 +916,6 @@ class Solution(object):
             
             return res
 
-           
         def sf(n):
             sum = 0
             while n > 0:
@@ -1215,6 +1214,43 @@ class Solution(object):
             a.sort()
         return ans
 
+    # Find optimal houses to pick to rob the most value
+    # Adjacent houses cannot be robbed, houses are arranged in a circle
+    # Return the most value you cant rob
+    def rob(self, nums: list[int]) -> int:
+        
+        def topHelper(arr):
+            @functools.cache
+            def helper(index):
+                if index == 0:
+                    return arr[0]
+                if index == 1:
+                    return max(arr[0], arr[1])
+                else:
+                    return max(arr[index] + helper(index - 2), helper(index - 1))
+            return helper(len(arr) - 1)
+
+        return max(topHelper(nums[1:]), topHelper(nums[:-1]))
+
+    # Find number of integers in n that don't have consecutive 1 bits
+    def findIntegers(self, n: int) -> int:
+        def hasConsecutive(num):
+            ref = 3 # 11
+            
+            while ref <= num:
+                if (ref & num) == ref:
+                    return True
+                else:
+                    ref <<= 1
+            return False
+            
+        ans = 0
+        for i in range(n + 1):
+            if not hasConsecutive(i):
+                ans += 1
+                
+        return ans                 
+
 def main():
     solution = Solution()
     graphTester = Graph()
@@ -1263,13 +1299,15 @@ def main():
         [2, 4]
     ]
     numNodes = [i for i in range(0, 11)]
-    nums = [-1,0,1,2,-1,-4]
+    nums = [1, 2, 3, 1]
     start = time.perf_counter_ns()
     # # # ----------------------------- # # #
 
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
     # ans = solution.FindNumMatches(a, b)
-    ans = solution.threeSum(nums)
+    for i in range(30):
+        print(i, ": ", solution.findIntegers(i))
+    ans = 5
     
 
     # # # ----------------------------- # # #

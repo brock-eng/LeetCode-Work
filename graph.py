@@ -1,4 +1,3 @@
-from operator import truediv
 from xmlrpc.client import MAXINT
 
 class Graph:
