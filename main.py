@@ -1176,7 +1176,7 @@ class Solution(object):
                 totals[num] = num
             if num > maxNumber:
                 maxNumber = num
-        
+
         @functools.cache
         def mp(num):
             if num == 0: return 0
@@ -1234,22 +1234,70 @@ class Solution(object):
 
     # Find number of integers in n that don't have consecutive 1 bits
     def findIntegers(self, n: int) -> int:
-        def hasConsecutive(num):
-            ref = 3 # 11
+        @functools.cache
+        def sumConsecutive(num):
+            if num <= 2:
+                return num + 1
+            else:
+                return sumConsecutive(num >> 1) + sumConsecutive(num >> 2)
             
-            while ref <= num:
-                if (ref & num) == ref:
-                    return True
-                else:
-                    ref <<= 1
-            return False
+        return sumConsecutive(n)     
+                             
+
+    # find the kth largest number in an array
+    def findKthLargest(self, nums: list[int], k: int) -> int:
+        s = len(nums)
+        
+        pivotIndex = s // 2
+        pivot = nums[pivotIndex]
+        
+        def partition(pindex):
+            for index in len(nums):
+                if nums[index] < nums[pindex]:
+                    temp = nums[index]
+                    nums[index] = nums[pindex]
+                    nums[pindex] = temp
+                    pindex = index
             
-        ans = 0
-        for i in range(n + 1):
-            if not hasConsecutive(i):
-                ans += 1
-                
-        return ans                 
+    # Given a sorted integer array of nums, find the index where a new number
+    # would be inserted
+    def searchInsert(self, nums: list[int], target: int) -> int:
+        s = len(nums)
+        l, m, r = 0, s // 2, s
+
+        while l < r:
+            val = nums[m]
+            if val == target:
+                return m
+            elif target <= val:
+                r = m
+                m = (r + l) // 2
+            else:
+                l = m + 1
+                m = (r + l) // 2
+            
+        return m
+    
+    def combinationSum3(self, k: int, n: int) -> list[list[int]]:
+        pnums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        ans = []
+        
+        def search(k, currSum, used, lastUsed):
+            if currSum == n and k == 0:
+                ans.append(used)
+            elif currSum > n or k == 0:
+                return
+            else:
+                candidates = [num for num in pnums if num not in used]
+                for num in candidates:
+                    if num > lastUsed:
+                        search(k - 1, currSum + num, used + [num], num)
+        
+        search(k, 0, [], 0)
+
+        return ans
+
+
 
 def main():
     solution = Solution()
@@ -1302,12 +1350,10 @@ def main():
     nums = [1, 2, 3, 1]
     start = time.perf_counter_ns()
     # # # ----------------------------- # # #
-
+    
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
     # ans = solution.FindNumMatches(a, b)
-    for i in range(30):
-        print(i, ": ", solution.findIntegers(i))
-    ans = 5
+    ans = solution.combinationSum3(3, 9)
     
 
     # # # ----------------------------- # # #
