@@ -1278,6 +1278,8 @@ class Solution(object):
             
         return m
     
+    # Given a target sum (n) and (k) possible numbers, find
+    # (k) unique digits in 1-9 that sum to (n)
     def combinationSum3(self, k: int, n: int) -> list[list[int]]:
         pnums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         ans = []
@@ -1297,7 +1299,101 @@ class Solution(object):
 
         return ans
 
+    # Find the lowest common ancestor between two nodes of a binary tree
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        ans = TreeNode()
+        
+        @functools.cache
+        def search(node) -> bool:
+            if not node:
+                return 0
+            count = 0
+            if node is p:
+                count += 1
+            if node is q:
+                count += 1
+            count += search(node.left)
+            count += search(node.right)
 
+            if count == 2: 
+                ans.val = node.val
+                ans.left = node.left
+                ans.right = node.right
+                count = 0
+                
+            return count
+    
+        search(root)
+        
+        return ans
+
+    # Given a linked list, group all nodes with odd indices together 
+    # followed by those with even indices
+    # Return the reordered list
+    def oddEvenList(self, head: ListNode) -> ListNode:
+        if not head: return
+        if not head.next: return head
+        
+        evenHead, oddHead = head, head.next
+        even, odd = evenHead, oddHead
+        curr = oddHead.next
+        
+        while curr:
+            even.next, odd.next = curr, curr.next
+            even, odd = curr, curr.next
+            if curr.next:
+                curr = curr.next.next
+            else:
+                break
+                
+        even.next = oddHead
+        return head
+
+    # Convert an integer to the column title it represents in excel
+    def convertToTitle(self, columnNumber: int) -> str:
+        
+        ans = str('')
+        quotient = columnNumber
+        while quotient > 26:
+            quotient, rem = divmod(quotient, 26)
+            ans = ans + chr(rem + ord('A') - 1)
+            quotient //= 26
+        ans = chr(quotient + ord('A') - 1) + ans
+        
+        return ans
+
+    # Given an array of distinct integers "nums" and a target, return the number 
+    # of possible combinations that add up to the target
+    def combinationSum4(self, nums: list[int], target: int) -> int:
+        # Bottom up approach
+        targetCache = [0] * (target + 1)
+        nums.sort()
+        totalSum = 0
+        for i in range(target + 1):
+            currSum = 0
+            for num in nums:
+                if num > i: break
+                elif num == i: currSum += 1
+                else:
+                    currSum += targetCache[i - num]
+            targetCache[i] = currSum
+        
+        return targetCache[-1]
+
+    def combinationSum4_2(self, nums: list[int], target: int) -> int:
+        # Backtracking recursive approach
+        @functools.cache
+        def search(target):
+            if target == 0:
+                return 1
+            else:
+                total = 0
+                for num in nums:
+                    if target - num >= 0:
+                        total += search(target - num)
+                return total
+            
+        return search(target)
 
 def main():
     solution = Solution()
@@ -1353,7 +1449,7 @@ def main():
     
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
     # ans = solution.FindNumMatches(a, b)
-    ans = solution.combinationSum3(3, 9)
+    ans = solution.convertToTitle(52)
     
 
     # # # ----------------------------- # # #
