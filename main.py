@@ -1395,6 +1395,27 @@ class Solution(object):
             
         return search(target)
 
+
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        ans = []
+        candidates.sort()
+        def search(prev, target):
+            if target == 0:
+                prev.sort()
+                if prev not in ans:
+                    ans.append(prev)
+                return
+            elif target < 0:
+                return
+            else:
+                for num in candidates:
+                    if num > target:
+                        break
+                    search(prev + [num], target - num)
+        
+        search([], target)
+        return ans
+
 def main():
     solution = Solution()
     graphTester = Graph()
@@ -1449,7 +1470,7 @@ def main():
     
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
     # ans = solution.FindNumMatches(a, b)
-    ans = solution.convertToTitle(52)
+    ans = solution.combinationSum([2, 3, 6, 7], 7)
     
 
     # # # ----------------------------- # # #
