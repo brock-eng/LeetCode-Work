@@ -1470,7 +1470,7 @@ def main():
     
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
     # ans = solution.FindNumMatches(a, b)
-    ans = solution.combinationSum([2, 3, 6, 7], 7)
+    ans = solution.combinationSum([2, 2, 2, 3, 6, 7], 7)
     
 
     # # # ----------------------------- # # #
