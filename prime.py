@@ -1,5 +1,12 @@
 from collections import defaultdict
+import functools
 
+
+def factorial(num: int):
+    ans = 1
+    for i in range(1, num + 1):
+        ans *= i
+    return ans
 
 def prime(num: int):
     if num <= 1: return False
@@ -50,15 +57,22 @@ def mostCommonNumber(nums: list[int]) -> int:
 
     return ans
 
-print(prime(3))    # true
-print(prime(5))    # true
-print(prime(10))   # false
-print(prime(12))   # false
-print(prime(31))   # true
+def numZeroes(num):
+    ans = 0
+    num = str(num)
 
-print(primeFactors(10523)) # 2 2 263
-nums = [0, 1, 2, 3, 4]
-print(mostCommonNumber(nums))
+    for i in range(1, len(num)):
+        if num[-i] != '0':
+            break
+        ans += 1
 
-print(nums[1:])
-print(nums[:-1])
+    return ans
+
+zeroes = 0
+for i in range(1500):
+    fact = factorial(i)
+    nz = numZeroes(fact)
+    if nz > zeroes:
+        print(nz, ' : ', i)
+        zeroes = nz
+

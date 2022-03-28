@@ -1243,7 +1243,6 @@ class Solution(object):
             
         return sumConsecutive(n)     
                              
-
     # find the kth largest number in an array
     def findKthLargest(self, nums: list[int], k: int) -> int:
         s = len(nums)
@@ -1395,7 +1394,6 @@ class Solution(object):
             
         return search(target)
 
-
     def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
         ans = []
         candidates.sort()
@@ -1467,7 +1465,6 @@ def main():
     nums = [1, 2, 3, 1]
     start = time.perf_counter_ns()
     # # # ----------------------------- # # #
-    
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
     # ans = solution.FindNumMatches(a, b)
     ans = solution.combinationSum([2, 2, 2, 3, 6, 7], 7)
