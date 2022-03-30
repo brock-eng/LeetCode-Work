@@ -1414,6 +1414,66 @@ class Solution(object):
         search([], target)
         return ans
 
+    # Given a 2D matrix representing john conways game of life
+    # return the next state of the board
+    def gameOfLife(self, board: list[list[int]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        
+        def GetState(row, col):
+            if row < 0 or col < 0 or row >= len(board) or col >= len(board[0]):
+                return False
+            
+            return board[row][col] == 1 or board[row][col] == 2
+            
+        def NextState(row, col):
+            prev = board[row][col]
+            total = 0
+            if row == 3 and col == 1:
+                x = 5
+            for i in range(-1, 2):
+                for j in range(-1, 2):
+                    if i == 0 and j == 0:
+                        pass
+                    elif GetState(i + row, j + col):
+                        total += 1
+            
+            if prev == 0 and total == 3:
+                return 3
+            
+            if total < 2 or total > 3:
+                if prev == 0:
+                    return 0
+                else:
+                    return 2
+            else:
+                return prev
+                
+        for row in range(len(board)):
+            for col in range(len(board[0])):
+                board[row][col] = NextState(row, col)
+                
+        for row in range(len(board)):
+            for col in range(len(board[0])):
+                board[row][col] = board[row][col] % 2
+
+    def lengthOfLIS(self, nums: list[int]) -> int:
+        s = len(nums)
+        LISMax = 1
+        LISValues = [1] * s
+        
+        for i in range(s - 1, -1, -1):
+            for j in range(i + 1, s):
+                if nums[i] < nums[j]:
+                    curr = LISValues[j] + 1
+                    if curr > LISMax:
+                        LISMax = curr
+                    if curr > LISValues[i]:
+                        LISValues[i] = curr
+        
+        return LISMax
+
 def main():
     solution = Solution()
     graphTester = Graph()
@@ -1431,7 +1491,6 @@ def main():
     a = [50, 1, 2, 3, 5, 7, 9, 20]
     b = [5, 6, 8, 9, 20, 40]
     num = [3,4,2]
-
 
     dijkstraSample = [
         [0, 1, 5],
@@ -1462,12 +1521,15 @@ def main():
         [2, 4]
     ]
     numNodes = [i for i in range(0, 11)]
-    nums = [1, 2, 3, 1]
+    nums = [0,1,0,3,2,3]
+    prevBoard = [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]
+
     start = time.perf_counter_ns()
     # # # ----------------------------- # # #
     # ans = graphTester.LazyDijkstra(dijkstraSample, numNodes, 0, 5)
     # ans = solution.FindNumMatches(a, b)
-    ans = solution.combinationSum([2, 2, 2, 3, 6, 7], 7)
+    ans = solution.lengthOfLIS(nums)
+    
     
 
     # # # ----------------------------- # # #

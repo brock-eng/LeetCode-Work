@@ -68,11 +68,18 @@ def numZeroes(num):
 
     return ans
 
-zeroes = 0
-for i in range(1500):
-    fact = factorial(i)
-    nz = numZeroes(fact)
-    if nz > zeroes:
-        print(nz, ' : ', i)
-        zeroes = nz
+# convert mph pace to a 5k time
+def paceToTime(pace: int):
+
+    dist = 3.106 # miles in a 5k
+    pace *= 1 / 60
+
+    return dist / pace
+
+def TimeToPace(time: int):
+    dist = 3.106
+    return dist / time * 60
+
+print(TimeToPace(30))
+print(TimeToPace(25))
 
