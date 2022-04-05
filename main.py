@@ -895,7 +895,7 @@ class Solution(object):
             
             if slow == fast: 
                 break
-                
+               
             slow = slow.next
             fast = fast.next.next
         
@@ -1040,7 +1040,7 @@ class Solution(object):
                 return ans
             i += 1
             seen[n] = i
-
+        
         ans += "." + dec
         return ans
 
