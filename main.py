@@ -1474,6 +1474,49 @@ class Solution(object):
         
         return LISMax
 
+    def pacificAtlantic(self, heights: list[list[int]]) -> list[list[int]]:
+        rs, cs = len(heights), len(heights[0])
+        ans = []
+        paths = [[1, 0], [0, 1], [-1, 0], [0, -1]]
+        state = [rs][cs]
+        def pacific(row, col) -> bool:
+            if row == 0 or col == 0:
+                return True
+            else:
+                for path in paths:
+                    nrow, ncol = row + path[0], col + path[1]
+                    if nrow >= rs or ncol >= cs or nrow < 0 or ncol < 0:
+                        # invalid row/col indices
+                        continue
+                    else:
+                        if heights[nrow][ncol] <= heights[row][col]:
+                            if pacific(nrow, ncol):
+                                return True
+                return False
+            
+            
+        def atlantic(row, col) -> bool:
+            if row == (rs - 1) or col == (cs - 1):
+                return True
+            else:
+                for path in paths:
+                    nrow, ncol = row + path[0], col + path[1]
+                    if nrow >= rs or ncol >= cs or nrow < 0 or ncol < 0:
+                        # invalid row/col indices
+                        continue
+                    else:
+                        if heights[nrow][ncol] <= heights[row][col]:
+                            if pacific(nrow, ncol):
+                                return True
+                return False
+        
+        for row in range(rs):
+            for col in range(cs):
+                if pacific(row, col) and atlantic(row, col):
+                        ans.append([row, col])
+        
+        return ans
+
 def main():
     solution = Solution()
     graphTester = Graph()
