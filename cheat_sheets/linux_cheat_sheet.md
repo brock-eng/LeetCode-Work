@@ -11,7 +11,7 @@ rm -r		- remove dir w/ files	\
 nohup 	- dictates that a process runs in the background	\
 cat     - show contents of a text file  \
 sudo    - run as admin  \
-ssh     - remote sign on
+ssh     - remote sign onn
 
 ### Memory CMDS
 df		    - show file size usage	\
