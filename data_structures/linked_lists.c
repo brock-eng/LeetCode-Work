@@ -10,6 +10,8 @@ typedef struct ListNode {
 	ListNode* nextNode = nullptr;
 } ListNode;
 
+//
+
 ListNode* CreateLinkedList(int value)
 {
 	ListNode* head = (ListNode*)malloc(sizeof(ListNode));
