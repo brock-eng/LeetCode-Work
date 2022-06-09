@@ -127,6 +127,7 @@ FROM Orders
 INNER JOIN Customer ON Orders.CustomerID = Customers.CustomerID
 ```
 
+
 ## Concept Questions
 
 ### Difference between DELETE / TRUNCATE
