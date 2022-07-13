@@ -84,6 +84,7 @@ When you select a portion of the file hierarchy to back up
 ### What is Inode?
 Stores informated about a file (metadata)
 
+          
 ### Which CMD is used to set a process to execute in less time?
 <nice [option] [cmd [arg]...]	\
 Priority ranges from -20 to 19
