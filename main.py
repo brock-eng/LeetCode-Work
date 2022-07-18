@@ -5,7 +5,6 @@ from xmlrpc.client import MAXINT
 
 from graph import Graph
 
-
 # Doubly linked list node
 class DNode:
     def __init__(self, key, val):
